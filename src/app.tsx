@@ -34,6 +34,7 @@ export function App() {
   
   const [filter, setFilter] = useState(urlFilter)
 
+
   const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
 
   const { data: tagsResponse, isLoading, isFetching } = useQuery<TagResponse>({

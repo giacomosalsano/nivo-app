@@ -6,8 +6,9 @@ const badge = tv({
 
   variants: {
     variant: {
-      ghost: 'bg-zinc-800 text-zinc-500',
-      primary: 'bg-teal-950 text-teal-300',
+      ghost: 'bg-overlay text-text-primary cursor-default',
+      primary: 'bg-primary text-text-primary cursor-default',
+      secondary: 'bg-secondary text-secondary-foreground cursor-default'
     },
   },
 

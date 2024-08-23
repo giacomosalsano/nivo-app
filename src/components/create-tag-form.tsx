@@ -6,11 +6,11 @@ import { Button } from "./ui/button";
 import * as Dialog from '@radix-ui/react-dialog'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-const createTagSchema = z.object({
+const nameOfProductSchema = z.object({
   title: z.string().min(3, { message: 'Minimum 3 characters.' }),
 })
 
-type CreateTagSchema = z.infer<typeof createTagSchema>
+type NameOfProductSchema = z.infer<typeof nameOfProductSchema>
 
 function getSlugFromString(input: string): string {
   return  input
@@ -24,8 +24,8 @@ function getSlugFromString(input: string): string {
 export function CreateTagForm() {
   const queryClient = useQueryClient()
 
-  const { register, handleSubmit, watch, formState } = useForm<CreateTagSchema>({
-    resolver: zodResolver(createTagSchema),
+  const { register, handleSubmit, watch, formState } = useForm<NameOfProductSchema>({
+    resolver: zodResolver(nameOfProductSchema),
   })
 
   const slug = watch('title') 
@@ -33,11 +33,11 @@ export function CreateTagForm() {
     : ''
 
   const { mutateAsync } = useMutation({
-    mutationFn: async ({ title }: CreateTagSchema) => {
+    mutationFn: async ({ title }: NameOfProductSchema) => {
       // delay 2s
       await new Promise(resolve => setTimeout(resolve, 2000))
 
-      await fetch('http://localhost:3333/tags', {
+      await fetch('http://localhost:5173/tags', {
         method: 'POST',
         body: JSON.stringify({
           title,
@@ -53,46 +53,52 @@ export function CreateTagForm() {
     }
   })
 
-  async function createTag({ title }: CreateTagSchema) {
+  async function createName({ title }: NameOfProductSchema) {
     await mutateAsync({ title })
   }
 
   return (
-    <form onSubmit={handleSubmit(createTag)} className="w-full space-y-6">
+    <form onSubmit={handleSubmit(createName)} className="w-full space-y-6">
       <div className="space-y-2">
-        <label className="text-sm font-medium block" htmlFor="title">Tag name</label>
+        <label className="text-sm font-medium text-text-primary block " htmlFor="title">New Name</label>
         <input 
           {...register('title')}
           id="name" 
+          placeholder='Type here the new name.'
           type="text" 
-          className="border border-zinc-800 rounded-lg px-3 py-2.5 bg-zinc-800/50 w-full text-sm"
+          className="border border-border hover:border-border-hover bg-foreground rounded-lg px-3 py-2 w-full text-sm focus:outline-primary focus:border-none"
         />
         {formState.errors?.title && (
-          <p className="text-sm text-red-400">{formState.errors.title.message}</p>
+          <p className="text-sm text-error">{formState.errors.title.message}</p>
         )}
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium block" htmlFor="slug">Slug</label>
+        <label className="text-sm font-medium text-text-primary block" htmlFor="slug">Slug</label>
         <input 
           id="slug" 
-          type="text" 
+          type="text"
+          placeholder='This will be automatically filled in.' 
           readOnly 
           value={slug}
-          className="border border-zinc-800 rounded-lg px-3 py-2 bg-zinc-800/50 w-full text-sm"
+          className="border border-border bg-foreground rounded-lg px-3 py-2 w-full text-sm"
         />
       </div>
 
       <div className="flex items-center justify-end gap-2">
         <Dialog.Close asChild>
-          <Button>
+          <Button variant='cancel' className='rounded-lg'>
             <X className="size-3" />
             Cancel
           </Button>
         </Dialog.Close>
-        <Button disabled={formState.isSubmitting} className="bg-teal-400 text-teal-950" type="submit">
+        <Button 
+          disabled={formState.isSubmitting}
+          variant={formState.isSubmitting ? 'loading' : 'save'}
+          className='rounded-lg'
+          type="submit">
           {formState.isSubmitting ? <Loader2 className="size-3 animate-spin" /> : <Check className="size-3" />}
-          Save
+          {formState.isSubmitting ? 'Saving...' : 'Save'}
         </Button>
       </div>
     </form>

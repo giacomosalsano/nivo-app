@@ -2,14 +2,19 @@ import { ComponentProps } from 'react'
 import { tv, type VariantProps } from 'tailwind-variants'
 
 const button = tv({
-  base: 'disabled:opacity-50 inline-flex items-center gap-1.5 text-xs font-medium',
+  base: 'disabled:bg-disabled inline-flex items-center gap-1.5 text-xs font-medium',
 
   variants: {
     variant: {
       default:
-        'py-1.5 px-2.5 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300 hover:border-zinc-700',
+        'py-1.5 px-2.5 rounded-md bg-primary text-text-primary hover:bg-primary-hover ',
       primary:
-        'py-1 px-2 rounded-full bg-teal-400 text-teal-950 hover:bg-teal-500',
+        'py-1 px-2 rounded-full bg-primary text-text-primary hover:bg-primary-hover ',
+      secondary:'py-1 px-2 rounded-full bg-secondary hover:bg-secondary-hover',
+      tertiary: 'py-1 px-2 rounded-full bg-tertiary hover:bg-tertiary-hover text-text-secondary',
+      cancel: 'py-1 px-2 rounded-full bg-error hover:bg-error-hover',
+      save: 'py-1 px-2 rounded-full bg-success hover:bg-success-hover',
+      loading: 'py-1 px-2 rounded-full bg-disabled text-text-disabled',
     },
     size: {
       default: '',

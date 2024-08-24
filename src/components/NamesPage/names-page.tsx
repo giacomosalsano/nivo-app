@@ -1,13 +1,16 @@
-import { MoreHorizontal } from 'lucide-react'
+import { FileDown, Filter, Loader2, MoreHorizontal, Plus, Search } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
+import * as Dialog from '@radix-ui/react-dialog';
+import { ChangeNameForm } from '../change-user-form/change-name-fom';
+import { Input } from '../ui/input';
 
-export function TagPage() {
+export function NamesPage() {
 
   return (
     <div>
       <div className="flex items-center gap-3">
-          <h1 className="text-xl font-bold">Tags</h1>
+          <h1 className="text-xl font-bold">Names</h1>
 
           <Dialog.Root>
             <Dialog.Trigger asChild>
@@ -29,7 +32,7 @@ export function TagPage() {
                   </Dialog.Description>
                 </div>
 
-                <CreateTagForm />
+                <ChangeNameForm />
               </Dialog.Content>
             </Dialog.Portal>
           </Dialog.Root>
@@ -63,23 +66,22 @@ export function TagPage() {
           <TableHeader>
             <TableRow>
               <TableHead></TableHead>
-              <TableHead>Tag</TableHead>
-              <TableHead>Amount of videos</TableHead>
+              <TableHead>Names</TableHead>
+              <TableHead>Email</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tagsResponse?.data.map((tag) => {
+            {namesResponse?.data.map((tag) => {
               return (
                 <TableRow key={tag.id}>
-                  <TableCell></TableCell>
                   <TableCell>
                     <div className="flex flex-col gap-0.5">
                       <span className="font-medium">{tag.title}</span>
-                      <span className="text-xs text-zinc-500">{tag.slug}</span>
+                      <span className="text-xs text-zinc-500">{tag.userName}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-zinc-300">
+                  <TableCell className="text-text-tertiary">
                     {tag.amountOfVideos} video(s)
                   </TableCell>
                   <TableCell className="text-right">

@@ -3,7 +3,7 @@ import { tv, type VariantProps } from 'tailwind-variants'
 
 const input = tv({
   slots: {
-    root: 'border border-border hover:border-border-hover',
+    root: 'border border-border hover:border-border-hover rounded-lg',
     control: 'placeholder-tertiary ',
   },
 

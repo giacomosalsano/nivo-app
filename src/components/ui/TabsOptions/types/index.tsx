@@ -3,12 +3,12 @@ type Title = {
   icon?: React.ReactNode
 }
 
-type Tab = {
+type TabOption = {
   title: Title
   content: React.ReactNode
   isDisabled?: boolean
 }
 
-export interface TabsProps {
-  tabs: Tab[]
+export interface TabOptionsProps {
+  tabs: TabOption[]
 }

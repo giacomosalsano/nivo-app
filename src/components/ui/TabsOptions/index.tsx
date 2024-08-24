@@ -1,10 +1,11 @@
-import { ListVideo, Tags, Settings, Code2 } from 'lucide-react'
+import { Tags, Settings, Code2, Users } from 'lucide-react'
 
 import { useState } from 'react'
 import { tv } from 'tailwind-variants'
 import { TabsProps } from './types'
+import { Tooltip } from '../Tooltip'
 
-const tabButton = tv({
+const optionTabButton = tv({
   base: 'py-1.5 gap-1.5  px-3 inline-flex items-center text-sm font-medium rounded-full border-2 border-transparent',
   variants: {
     isActive: {
@@ -16,16 +17,12 @@ const tabButton = tv({
       true: 'text-text-disabled cursor-not-allowed font-medium justify-center items-center  border-b-text-disabled hover:text-text-disabled hover:border-b-text-disabled',
       false: null,
     },
+    filterOption: 'p-1 mt-4 border border-border rounded-lg',
   },
 })
 
 
-const tabs = [
-  {
-    title: { name: 'Uploads', icon: <ListVideo className="size-4" />
-    },
-    content: null,
-  },
+const optionTabButtons = [
   {
     title: { name: 'Names', icon: <Tags className="size-4" /> },
     content: null,
@@ -35,42 +32,57 @@ const tabs = [
     content: null,
   },
   {
-    title: { name: 'Developers', icon: <Code2 className="size-4" /> },
+    title: { name: 'Friends', icon: <Users className="size-4" /> },
     content: null,
     isDisabled: true,
   },
 ]
 export function Tabs() {
-  const [activeTab, setActiveTab] = useState<number>(1)
+  const [activeTabOption, setactiveTabOption] = useState<number>(1)
 
-const newTabs = tabs.map((tab, index) => {
-  return {
-    ...tab,
-    id: index + 1,
-  }
-})
+  const newOptionTabButton = optionTabButtons.map((option, index) => {
+    return {
+      ...option,
+      id: index + 1,
+    }
+  })
 
   return (
     <div className='p-2 max-w-[1200px] mx-auto flex items-center justify-between'>
       <div className="flex items-center gap-2 max-w-[1200px] mx-auto">
-        {newTabs.map((item) => (
+        {newOptionTabButton.map((item) => (
           <button
-            className={tabButton({
-              isActive: item.id === activeTab,
+            className={optionTabButton({
+              isActive: item.id === activeTabOption,
               disabled: item.isDisabled,
             })}
             key={item.id}
-            onClick={() => setActiveTab(item.id)}
+            onClick={() => setactiveTabOption(item.id)}
             disabled={item.isDisabled}
           >
-            <span className="flex items-center gap-2">
-              {item.title.icon} {item.title.name}
-            </span>
+            {item.isDisabled?
+    
+            <Tooltip content={'This is yet to come...'}
+            children={
+              <div className="">
+                <span className="max-w-20 truncate text-ellipsis">
+                  <span className="flex items-center gap-2 ">
+                    {item.title.icon} {item.title.name}
+                  </span>
+                </span>
+              </div>
+            }>
+              
+            </Tooltip>
+            : <span className="flex items-center gap-2">
+            {item.title.icon} {item.title.name}
+          </span>}
+            
           </button>
         ))}
       </div>
       <div className="flex items-center text-justify">
-        {newTabs.find((tab) => tab.id === activeTab)?.content}
+        {newOptionTabButton.find((optionTab) => optionTab.id === activeTabOption)?.content}
       </div>
     </div>
   )

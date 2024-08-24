@@ -28,9 +28,10 @@ export function TableHead(props: TableHeadProps) {
     <th
       {...props}
       className={twMerge(
-        'text-left py-3 px-4 font-medium text-text-primary',
+        'py-3 px-4 font-medium justify-between text-text-primary ',
         props.className,
       )}
+      
     />
   )
 }
@@ -42,7 +43,7 @@ export function TableBody(props: TableBodyProps) {
     <tbody
       {...props}
       className={twMerge(
-        '[&_tr:last-child]:border-0 [&_tr:hover]:bg-zinc-800/50',
+        '[&_tr:last-child]:border-0 [&_tr:hover]:bg-overlay rounded-lg border-b border-overlay',
         props.className,
       )}
     />
@@ -63,5 +64,5 @@ export function TableRow(props: TableRowProps) {
 interface TableCellProps extends ComponentProps<'td'> {}
 
 export function TableCell(props: TableCellProps) {
-  return <td {...props} className={twMerge('py-3 px-4', props.className)} />
+  return <td {...props} className={twMerge('text-center justify-between py-3 px-4 rounded-full', props.className)} />
 }

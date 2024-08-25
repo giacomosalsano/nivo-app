@@ -141,8 +141,8 @@ export function Header() {
                   className="w-10 h-10 rounded-full"
                 />
                 <div className="flex flex-col">
-                  <span className="text-primary">{user.email}</span>
-                  <small className="text-text-primary">{user.role}</small>
+                  <span className="text-primary">{frame.email}</span>
+                  <small className="text-text-primary">{frame.role}</small>
                 </div>
               </div>
             </section>

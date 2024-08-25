@@ -1,4 +1,4 @@
-import { Search, Filter, Loader2, UserPlus, Edit2Icon, Edit, UserCog, User, Mail, AtSign } from 'lucide-react'
+import { Search, Filter, Loader2, UserPlus,  Edit, Frame, Mail, AtSign, User } from 'lucide-react'
 import { Header } from './components/header'
 import { Tabs } from './components/ui/TabsOptions'
 import { Button } from './components/ui/button'
@@ -9,26 +9,26 @@ import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { FormEvent, useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog';
-import { AddNameForm } from './components/add-user-form/add-name-fom'
-import { Users } from './components/users/users'
-import { ChangeNameForm } from './components/change-user-form/change-name-fom'
 import { DropDown } from './components/ui/DropDown'
+import { CreateFrameForm } from './components/create-frame-form/create-frame-fom'
+import { Frames } from './components/FramesExamples/frames'
+import { UpdateFrameForm } from './components/update-frame-form/update-frame-fom'
 
-export interface UserResponse {
+export interface FrameResponse {
   first: number
   prev: number | null
   next: number
   last: number
   pages: number
   items: number
-  data: User[]
+  data: Frame[]
 }
 
-export interface User {
+export interface Frame {
   firstName: string
-  secondName: string
-  userName: string
-  email: string
+  lastName: string
+  frameNameSlug: string
+  htmlContent: string
   id: string
 }
 
@@ -41,7 +41,7 @@ export function App() {
 
   const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
 
-  const { data: namesResponse, isLoading, isFetching } = useQuery<UserResponse>({
+  const { data: namesResponse, isLoading, isFetching } = useQuery<FrameResponse>({
     queryKey: ['get-tags', urlFilter, page],
     queryFn: async () => {
       const response = await fetch(`http://localhost:3333/tags?_page=${page}&_per_page=10&title=${urlFilter}`)
@@ -78,13 +78,13 @@ export function App() {
       <main className="max-w-6xl mx-auto space-y-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 align-middle block-inline">
-            <h1 className="text-xl font-bold">All Names</h1>
+            <h1 className="text-xl font-bold">All Frames</h1>
             <form onSubmit={handleFilter} className="items-center gap-2 text-text-primary ">
               <Input variant='filter'>
                 <Search className="size-3 text-text-primary" />
                 <Control 
                   className='placeholder:text-text-primary'
-                  placeholder="Search names..." 
+                  placeholder="Search frames..." 
                   onChange={e => setFilter(e.target.value)}
                   value={filter}
                 />
@@ -112,15 +112,15 @@ export function App() {
                           <Button
                             className='rounded-lg'
                             variant='primary'>
-                              <User className='size-4'/>User</Button>
+                              <User className='size-4'/>Frame Id</Button>
                           <Button
                             className='rounded-lg'
                             variant='primary'>
-                              <Mail className='size-4'/>Email</Button>
+                              <Mail className='size-4'/>Frame Name</Button>
                           <Button 
                             className='rounded-lg'
                             variant='primary'>
-                              <AtSign className='size-4'/>username</Button>
+                              <AtSign className='size-4'/>HTMLContent</Button>
                         </section>
                         </div>
                       </div>
@@ -134,7 +134,7 @@ export function App() {
               <Dialog.Trigger asChild>
                 <Button className='rounded-lg'>
                   <UserPlus className="size-3" />
-                  Add User
+                  Add Frame
                 </Button> 
               </Dialog.Trigger>
 
@@ -143,14 +143,14 @@ export function App() {
                 <Dialog.Content className="fixed space-y-10 p-10 right-0 top-0 bottom-0 h-screen min-w-[400px] z-10 bg-background">
                   <div className="space-y-3">
                     <Dialog.Title className="text-xl font-bold">
-                      Add User
+                      Add Frame
                     </Dialog.Title>
                     <Dialog.Description className="text-sm text-text-primary">
-                      Here you can add an user.
+                      Here you can add an frame.
                     </Dialog.Description>
                   </div>
 
-                  <AddNameForm />
+                  <CreateFrameForm />
                   
                 </Dialog.Content>
               </Dialog.Portal>
@@ -161,23 +161,23 @@ export function App() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Names</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>@username</TableHead>
+              <TableHead>Frame ID</TableHead>
+              <TableHead>Frame Name</TableHead>
+              <TableHead>HTML Content</TableHead>
               <TableHead>Edit</TableHead>
             </TableRow>
           </TableHeader>
-          {Users.map((user)=> {
+          {Frames.map((frame)=> {
             return (
             <TableBody 
-              key={user.email}
+              key={frame.htmlContent}
               className='font-medium text-xs text-text-primary '>
               <TableRow>
                     <TableCell className='font-medium text-xs text-text-primary'>
-                        {user.name.firstName} {' '} {user.name.secondName}
+                        {frame.name.firstName} {' '} {frame.name.lastName}
                   </TableCell>
-                  <TableCell className='font-medium text-xs text-text-primary'>{user.email}</TableCell>
-                  <TableCell className='font-medium text-xs text-text-primary'>@{user.userName}</TableCell>
+                  <TableCell className='font-medium text-xs text-text-primary'>{frame.htmlContent}</TableCell>
+                  <TableCell className='font-medium text-xs text-text-primary'>@{frame.frameNameSlug}</TableCell>
                   <TableCell className='font-medium text-xs text-text-primary'>
                   <Dialog.Root>
                     <Dialog.Trigger asChild>
@@ -195,14 +195,14 @@ export function App() {
                       <Dialog.Content className="fixed space-y-10 p-10 right-0 top-0 bottom-0 h-screen min-w-[400px] z-10 bg-background">
                         <div className="space-y-3">
                           <Dialog.Title className="text-xl font-bold">
-                            Edit {user.name.firstName} {user.name.secondName}'s info
+                            Edit {frame.name.firstName} {frame.name.lastName}'s info
                           </Dialog.Title>
                           <Dialog.Description className="text-sm text-text-primary">
-                            Here you can edit the user {user.userName}.
+                            Here you can edit the frame {frame.frameNameSlug}.
                           </Dialog.Description>
                         </div>
 
-                        <ChangeNameForm />
+                        <UpdateFrameForm />
                         
                       </Dialog.Content>
                     </Dialog.Portal>
@@ -216,19 +216,19 @@ export function App() {
           
 
           <TableBody>
-            {namesResponse?.data.map((user) => {
+            {namesResponse?.data.map((frame) => {
               return (
-                <TableRow key={user.id}>
+                <TableRow key={frame.id}>
                   <div>
                     {isFetching && <Loader2 className="size-4 animate-spin text-disabled" />} 
                     <TableCell>
                       <div className="flex flex-col gap-0.5">
-                        <span className="font-medium text-xs text-text-primary">{user.firstName} {user.secondName}</span>
-                        <span className="text-xs text-text-primary">{user.userName}</span>
+                        <span className="font-medium text-xs text-text-primary">{frame.firstName} {frame.lastName}</span>
+                        <span className="text-xs text-text-primary">{frame.frameNameSlug}</span>
                       </div>
                     </TableCell>
                     <TableCell className="text-text-primary">
-                      {user.email}
+                      {frame.htmlContent}
                     </TableCell>  
                   </div>
                 </TableRow>

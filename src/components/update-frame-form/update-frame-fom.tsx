@@ -5,41 +5,48 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from "../ui/button";
 import * as Dialog from '@radix-ui/react-dialog'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { getUserNameFromString } from '../get-user-name-from-string';
 
-const nameOfUserSchema = z.object({
+const nameOfFrameSchema = z.object({
   firstName: z.string().min(3, { message: 'Minimum 3 characters.' }),
-  secondName: z.string().min(3, { message: 'Minimum 3 characters.' }),
-  email: z.string().email({ message: 'Email is required.' })
+  lastName: z.string().min(3, { message: 'Minimum 3 characters.' }),
+  htmlContent: z.string().min(3, { message: 'This field is required.' })
 
 })
 
-type NameOfUserSchema = z.infer<typeof nameOfUserSchema>
+type NameOfFrameSchema = z.infer<typeof nameOfFrameSchema>
 
+function getFrameNameFromString(input: string): string {
+  return  input
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^\w\s]/g, '')
+    .replace(/\s+/g, '-');
+}
 
-export function AddNameForm() {
+export function UpdateFrameForm() {
   const queryClient = useQueryClient()
 
-  const { register, handleSubmit, watch, formState } = useForm<NameOfUserSchema>({
-    resolver: zodResolver(nameOfUserSchema),
+  const { register, handleSubmit, watch, formState } = useForm<NameOfFrameSchema>({
+    resolver: zodResolver(nameOfFrameSchema),
   })
 
-  const userName = watch('firstName') 
-    ? getUserNameFromString(watch('firstName')) + '_' + getUserNameFromString(watch('secondName'))
+  const frameNameSlug = watch('firstName') 
+    ? getFrameNameFromString(watch('firstName')) + '_' + getFrameNameFromString(watch('lastName'))
     : ''
 
   const { mutateAsync } = useMutation({
-    mutationFn: async ({ firstName, secondName, email }: NameOfUserSchema) => {
+    mutationFn: async ({ firstName, lastName, htmlContent }: NameOfFrameSchema) => {
       // delay 2s
       await new Promise(resolve => setTimeout(resolve, 2000))
 
-      await fetch('http://localhost:5173/users', {
-        method: 'POST',
+      await fetch('http://localhost:5173/frames', {
+        method: 'PUT',
         body: JSON.stringify({
           firstName,
-          secondName,
-          userName,
-          email,
+          lastName,
+          frameNameSlug,
+          htmlContent,
         }),
       })
     },
@@ -50,18 +57,18 @@ export function AddNameForm() {
     }
   })
 
-  async function changeName({ firstName, secondName, email }: NameOfUserSchema) {
-    await mutateAsync({ firstName, secondName, email })
+  async function changeName({ firstName, lastName, htmlContent }: NameOfFrameSchema) {
+    await mutateAsync({ firstName, lastName, htmlContent })
   }
 
   return (
     <form onSubmit={handleSubmit(changeName)} className="w-full space-y-6">
       <div className="space-y-2">
-        <label className="text-sm font-medium text-text-primary block " htmlFor="title">First Name</label>
+        <label className="text-sm font-medium text-text-primary block " htmlFor="title">Change First Name</label>
         <input 
           {...register('firstName')}
           id="name" 
-          placeholder='Type here the first name.'
+          placeholder='Type here the new first name.'
           type="text" 
           className="border border-border hover:border-border-hover bg-foreground rounded-lg px-3 py-2 w-full text-sm focus:outline-primary focus:border-none"
         />
@@ -70,40 +77,40 @@ export function AddNameForm() {
         )}
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium text-text-primary block " htmlFor="title">Second Name</label>
+        <label className="text-sm font-medium text-text-primary block " htmlFor="title">Change Last Name</label>
         <input 
-          {...register('secondName')}
+          {...register('lastName')}
           id="name" 
-          placeholder='Type here the second name.'
+          placeholder='Type here the new last name.'
           type="text" 
           className="border border-border hover:border-border-hover bg-foreground rounded-lg px-3 py-2 w-full text-sm focus:outline-primary focus:border-none"
         />
-        {formState.errors?.secondName && (
-          <p className="text-sm text-error">{formState.errors.secondName.message}</p>
+        {formState.errors?.lastName && (
+          <p className="text-sm text-error">{formState.errors.lastName.message}</p>
         )}
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium text-text-primary block " htmlFor="title">Email</label>
+        <label className="text-sm font-medium text-text-primary block " htmlFor="title">Change Email</label>
         <input 
-          {...register('email')}
+          {...register('htmlContent')}
           id="name" 
-          placeholder='Type here the email.'
-          type="email" 
+          placeholder='Type here the new HTMLContent.'
+          type="text" 
           className="border border-border hover:border-border-hover bg-foreground rounded-lg px-3 py-2 w-full text-sm focus:outline-primary focus:border-none"
         />
-        {formState.errors?.email && (
-          <p className="text-sm text-error">{formState.errors.email.message}</p>
+        {formState.errors?.htmlContent && (
+          <p className="text-sm text-error">{formState.errors.htmlContent.message}</p>
         )}
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-text-primary block" htmlFor="slug">User Name</label>
+        <label className="text-sm font-medium text-text-primary block" htmlFor="slug">Frame Name</label>
         <input 
           id="slug" 
           type="text"
           placeholder='This will be automatically filled in.' 
           readOnly 
-          value={userName}
+          value={frameNameSlug}
           className="border border-border bg-foreground rounded-lg px-3 py-2 w-full text-sm"
         />
       </div>

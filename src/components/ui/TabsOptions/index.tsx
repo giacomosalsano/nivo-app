@@ -1,8 +1,7 @@
-import { Tags, Settings, Code2, Users } from 'lucide-react'
+import { Tags, Settings, Users } from 'lucide-react'
 
 import { useState } from 'react'
 import { tv } from 'tailwind-variants'
-import { TabsProps } from './types'
 import { Tooltip } from '../Tooltip'
 
 const optionTabButton = tv({
@@ -24,7 +23,7 @@ const optionTabButton = tv({
 
 const optionTabButtons = [
   {
-    title: { name: 'Names', icon: <Tags className="size-4" /> },
+    title: { name: 'Frames', icon: <Tags className="size-4" /> },
     content: null,
   },
   {
@@ -32,7 +31,7 @@ const optionTabButtons = [
     content: null,
   },
   {
-    title: { name: 'Friends', icon: <Users className="size-4" /> },
+    title: { name: 'Share', icon: <Users className="size-4" /> },
     content: null,
     isDisabled: true,
   },

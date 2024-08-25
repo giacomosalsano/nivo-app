@@ -5,13 +5,13 @@ export interface NameResponse {
   last: number
   pages: number
   items: number
-  data: Name[]
+  data: FrameInterface[]
 }
 
-export interface Name {
+export interface FrameInterface {
   firstName: string
-  secondName: string
-  userName: string
-  email: string
+  lastName: string
+  frameNameSlug: string
+  htmlContent: string
   id: string
 }

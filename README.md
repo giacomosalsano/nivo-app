@@ -30,7 +30,7 @@ This project was developed with the following tools:
 
 ## 💻 Project
 
-This project is a complete form that allows the registration of a product and, at the same time, allows us to connect the user to one or more categories that can be created while we are adding the product.
+This project is a complete form that allows the registration of a product and, at the same time, allows us to connect the frame to one or more categories that can be created while we are adding the product.
 
 
 

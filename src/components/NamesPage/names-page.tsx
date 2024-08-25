@@ -2,15 +2,15 @@ import { FileDown, Filter, Loader2, MoreHorizontal, Plus, Search } from 'lucide-
 import { Button } from '../ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import * as Dialog from '@radix-ui/react-dialog';
-import { ChangeNameForm } from '../change-user-form/change-name-fom';
 import { Input } from '../ui/input';
+import { UpdateFrameForm } from '../update-frame-form/update-frame-fom';
 
 export function NamesPage() {
 
   return (
     <div>
       <div className="flex items-center gap-3">
-          <h1 className="text-xl font-bold">Names</h1>
+          <h1 className="text-xl font-bold">Frames</h1>
 
           <Dialog.Root>
             <Dialog.Trigger asChild>
@@ -32,7 +32,7 @@ export function NamesPage() {
                   </Dialog.Description>
                 </div>
 
-                <ChangeNameForm />
+                <UpdateFrameForm />
               </Dialog.Content>
             </Dialog.Portal>
           </Dialog.Root>
@@ -65,9 +65,9 @@ export function NamesPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead></TableHead>
-              <TableHead>Names</TableHead>
-              <TableHead>Email</TableHead>
+              <TableHead>ID</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>HTML</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -78,7 +78,7 @@ export function NamesPage() {
                   <TableCell>
                     <div className="flex flex-col gap-0.5">
                       <span className="font-medium">{tag.title}</span>
-                      <span className="text-xs text-zinc-500">{tag.userName}</span>
+                      <span className="text-xs text-zinc-500">{tag.frameNameSlug}</span>
                     </div>
                   </TableCell>
                   <TableCell className="text-text-tertiary">

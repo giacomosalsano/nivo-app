@@ -1,61 +1,45 @@
 import { Check, Loader2, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import * as Dialog from '@radix-ui/react-dialog'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { getFrameNameFromString } from '../get-frame-name-from-string';
+import { getFrameNameFromString } from '../../GetFrameNameFromString/getFrameNameFromString';
+import { nameOfFrameSchema, NameOfFrameSchema } from '../../NameOfFrameSchema/nameOfFrameSchema';
+import { createFrame } from '../../../core/modules/frames/service/createFrame';
 
-const nameOfFrameSchema = z.object({
-  firstName: z.string().min(3, { message: 'Minimum 3 characters.' }),
-  lastName: z.string().min(3, { message: 'Minimum 3 characters.' }),
-  htmlContent: z.string().min(3, { message: 'This field is required.' })
 
-})
 
-type NameOfFrameSchema = z.infer<typeof nameOfFrameSchema>
 
 
 export function CreateFrameForm() {
-  const queryClient = useQueryClient()
 
   const { register, handleSubmit, watch, formState } = useForm<NameOfFrameSchema>({
     resolver: zodResolver(nameOfFrameSchema),
   })
 
+
+
   const frameNameSlug = watch('firstName') 
     ? getFrameNameFromString(watch('firstName')) + '_' + getFrameNameFromString(watch('lastName'))
     : ''
 
-  const { mutateAsync } = useMutation({
-    mutationFn: async ({ firstName, lastName, htmlContent }: NameOfFrameSchema) => {
-      // delay 2s
-      await new Promise(resolve => setTimeout(resolve, 2000))
-
-      await fetch('http://localhost:5173/frames', {
-        method: 'POST',
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          frameNameSlug,
-          htmlContent,
-        }),
-      })
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['get-tags'],
-      })
-    }
-  })
-
-  async function changeName({ firstName, lastName, htmlContent }: NameOfFrameSchema) {
-    await mutateAsync({ firstName, lastName, htmlContent })
-  }
+    const onSubmit = handleSubmit(async (data)=> {
+      try {
+        await createFrame(data)
+        window.alert(
+          'Your frame has been created successfully.',
+        )
+      }
+      catch (error) {
+        window.alert(
+          'An error occurred while creating your frame. Please try again later.',
+        )
+      }
+      
+    })
 
   return (
-    <form onSubmit={handleSubmit(data => changeName(data))} className="w-full space-y-6">
+    <form onSubmit={onSubmit} className="w-full space-y-6">
       <div className="space-y-2">
         <label className="text-sm font-medium text-text-primary block " htmlFor="title">First Name</label>
         <input 
@@ -99,7 +83,8 @@ export function CreateFrameForm() {
       <div className="space-y-2">
         <label className="text-sm font-medium text-text-primary block" htmlFor="slug">Frame Name</label>
         <input 
-          id="slug" 
+        {...register('frameNameSlug')}
+          id="frameNameSlug" 
           type="text"
           placeholder='This will be automatically filled in.' 
           readOnly 

@@ -1,37 +1,19 @@
-import { Search, Filter, Loader2, UserPlus,  Edit, Frame, Mail, AtSign, User } from 'lucide-react'
-import { Header } from './components/header'
+import { Search, Filter, Loader2, UserPlus, Edit, Mail, AtSign, User } from 'lucide-react'
+import { Header } from './components/ui/header'
 import { Tabs } from './components/ui/TabsOptions'
 import { Button } from './components/ui/button'
 import { Control, Input } from './components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './components/ui/table'
-import { Pagination } from './components/pagination'
+import { Pagination } from './components/ui/pagination'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { FormEvent, useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog';
 import { DropDown } from './components/ui/DropDown'
-import { CreateFrameForm } from './components/create-frame-form/create-frame-fom'
-import { Frames } from './components/FramesExamples/frames'
-import { UpdateFrameForm } from './components/update-frame-form/update-frame-fom'
-
-export interface FrameResponse {
-  first: number
-  prev: number | null
-  next: number
-  last: number
-  pages: number
-  items: number
-  data: Frame[]
-}
-
-export interface Frame {
-  firstName: string
-  lastName: string
-  frameNameSlug: string
-  htmlContent: string
-  id: string
-}
-
+import { CreateFrameForm } from './components/Forms/CreateFrameForm/createFrameForm'
+import { Frames } from './components/FramesExamples/framesExamples'
+import { FrameResponse } from './components/Interfaces/FrameResponseInterface'
+import { UpdateFrameForm } from './components/Forms/UpdateFrameForm/updateFrameForm'
 export function App() {
   const [searchParams, setSearchParams] = useSearchParams()
   const urlFilter = searchParams.get('filter') ?? ''

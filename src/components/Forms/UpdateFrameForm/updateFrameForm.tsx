@@ -2,9 +2,9 @@ import { Check, Loader2, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from "../ui/button";
 import * as Dialog from '@radix-ui/react-dialog'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button } from '../../ui/button'
 
 const nameOfFrameSchema = z.object({
   firstName: z.string().min(3, { message: 'Minimum 3 characters.' }),

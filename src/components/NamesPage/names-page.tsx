@@ -3,7 +3,7 @@ import { Button } from '../ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import * as Dialog from '@radix-ui/react-dialog';
 import { Input } from '../ui/input';
-import { UpdateFrameForm } from '../update-frame-form/update-frame-fom';
+import { UpdateFrameForm } from '../UpdateFrameForm/update-frame-fom';
 
 export function NamesPage() {
 

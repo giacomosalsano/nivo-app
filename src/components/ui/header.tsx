@@ -1,11 +1,9 @@
 import { ChevronDown, UserCog, HelpCircle, LogOut } from 'lucide-react'
-
-import imgProfile from '../assets/IMG_1770-resized.png'
-
-import nivoLogo from '../assets/logo-nivo.svg'
-import { Badge } from './ui/badge'
-import { DropDown } from './ui/DropDown'
-import { Button } from './ui/button'
+import { Badge } from './badge'
+import { DropDown } from './DropDown'
+import { Button } from './button'
+import imgProfile from '../../assets/img_profile.png'
+import nivoLogo from '../../assets/logo-nivo.svg'
 
 export function Header() {
   return (

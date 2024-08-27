@@ -6,8 +6,8 @@ import {
 } from 'lucide-react'
 
 import { useSearchParams } from 'react-router-dom'
-import { Button } from './ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
+import { Button } from './button'
+import { Select, SelectContent, SelectItem, SelectTrigger } from './select'
 
 interface PaginationProps {
   pages: number

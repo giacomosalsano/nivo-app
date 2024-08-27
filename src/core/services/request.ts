@@ -27,7 +27,7 @@ export async function request<T>({
   body,
   params,
   cacheTime = 30,
-}: RequestProps): Promise<Respose<T>> {
+}: RequestProps): Promise<T> {
   const query = {}
   let axiosResponse: AxiosResponse
 
@@ -53,10 +53,9 @@ export async function request<T>({
 
   axiosResponse = getForCache(key)
 
-  if (!axiosResponse) return
-
-  return {
-    code: axiosResponse.status,
-    data: axiosResponse.data,
+  if (!axiosResponse) {
+    throw new Error('No response available in cache');
   }
+
+  return axiosResponse.data as T;
 }

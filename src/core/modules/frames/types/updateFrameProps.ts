@@ -1,5 +1,5 @@
 export interface UpdateFrameProps {
-  id: string
+  id?: string
   firstName: string
   lastName: string
   frameNameSlug: string

@@ -21,7 +21,7 @@ export function EditFramePortal() {
 
         {Frames.map((frame)=> {
           return (
-            <Dialog.Portal>
+            <Dialog.Portal key={frame.frameNameSlug}>
                 <Dialog.Overlay className="fixed inset-0 bg-overlay" />
 
                 <Dialog.Content className="fixed space-y-10 p-10 right-0 top-0 bottom-0 h-screen min-w-[400px] z-10 bg-background">
@@ -31,7 +31,7 @@ export function EditFramePortal() {
                     </Dialog.Title>
                     
                     <Dialog.Description className="text-sm text-text-primary">
-                      Here you can edit the frame {frame.frameNameSlug}.
+                      Here you can edit the frame @{frame.frameNameSlug}.
                     </Dialog.Description>
                   </div>
 

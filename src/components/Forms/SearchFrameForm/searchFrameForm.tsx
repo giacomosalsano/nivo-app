@@ -1,23 +1,38 @@
-import { AtSign, Filter, Mail, Search, User } from "lucide-react";
+import { AtSign, Filter, Hash, Search, WholeWord } from "lucide-react";
 import { Control, Input } from "../../ui/input";
 import { DropDown } from "../../ui/DropDown";
 import { Button } from "../../ui/button";
+import { useSearchParams } from "react-router-dom";
+import { FormEvent, useState } from "react";
 
 export function SearchFrameForm() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const urlFilter = searchParams.get('filter') ?? ''
+  const [filter, setFilter] = useState(urlFilter)
 
+  function handleFilter(event: FormEvent) {
+    event.preventDefault()
+
+    setSearchParams(params => {
+      params.set('page', '1')
+      params.set('filter', filter)
+
+      return params
+    })
+  }
 
 
   return (
     
     <div>
-      <form onSubmit={() => {}} className="items-center gap-2 text-text-primary ">
+      <form onSubmit={handleFilter} className="items-center gap-2 text-text-primary ">
           <Input variant='filter'>
             <Search className="size-3 text-text-primary" />
             <Control 
               className='placeholder:text-text-primary'
               placeholder="Search frames..." 
-              onChange={() => {}}
-              value={"undefined"}
+              onChange={e => setFilter(e.target.value)}
+              value={filter}
             />
               <DropDown>
                 <DropDown.Trigger className='place-self-end'>
@@ -43,15 +58,15 @@ export function SearchFrameForm() {
                       <Button
                         className='rounded-lg'
                         variant='primary'>
-                          <User className='size-4'/>Frame Id</Button>
-                      <Button
-                        className='rounded-lg'
-                        variant='primary'>
-                          <Mail className='size-4'/>Frame Name</Button>
+                          <WholeWord className='size-4'/>Frame Name</Button>
                       <Button 
                         className='rounded-lg'
                         variant='primary'>
-                          <AtSign className='size-4'/>HTMLContent</Button>
+                          <AtSign className='size-4'/>Frame Slug</Button>
+                      <Button
+                        className='rounded-lg'
+                        variant='primary'>
+                          <Hash className='size-4'/>Frame ID</Button>
                     </section>
                     </div>
                   </div>

@@ -6,7 +6,7 @@ const module = '/frames'
 ;
 
 export async function getAllFrames(params: GetAllFramesProps) {
-  return await request<Frame>({
+  return await request<Frame[]>({
     url: `${module}/`,
     method: 'get',
     params,

@@ -1,73 +1,52 @@
 import { Check, Loader2, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from '../../ui/button'
+import { updateFrame } from '../../../core/modules/frames/service/updateFrame'
+import { frameSchema } from '../../FrameSchema/frameSchema'
+import { Frame } from '../../Interfaces/FrameInterface'
+import { getFrameNameFromString } from '../../GetFrameNameFromString/getFrameNameFromString'
 
-const nameOfFrameSchema = z.object({
-  firstName: z.string().min(3, { message: 'Minimum 3 characters.' }),
-  lastName: z.string().min(3, { message: 'Minimum 3 characters.' }),
-  htmlContent: z.string().min(3, { message: 'This field is required.' })
 
-})
 
-type NameOfFrameSchema = z.infer<typeof nameOfFrameSchema>
-
-function getFrameNameFromString(input: string): string {
-  return  input
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^\w\s]/g, '')
-    .replace(/\s+/g, '-');
-}
 
 export function UpdateFrameForm() {
-  const queryClient = useQueryClient()
+  const { } = frame
 
-  const { register, handleSubmit, watch, formState } = useForm<NameOfFrameSchema>({
-    resolver: zodResolver(nameOfFrameSchema),
+  const { register, handleSubmit, watch, formState } = useForm<Frame>({
+    resolver: zodResolver(frameSchema),
+    defaultValues: {firstName: frame.firstName}
   })
 
   const frameNameSlug = watch('firstName') 
     ? getFrameNameFromString(watch('firstName')) + '_' + getFrameNameFromString(watch('lastName'))
     : ''
 
-  const { mutateAsync } = useMutation({
-    mutationFn: async ({ firstName, lastName, htmlContent }: NameOfFrameSchema) => {
-      // delay 2s
-      await new Promise(resolve => setTimeout(resolve, 2000))
+    const onSubmit = handleSubmit(async (data)=> {
+      try {
+        await updateFrame(data)
+        window.alert(
+          'Your frame has been updated successfully.',
+        )
+      }
+      catch (error) {
+        window.alert(
+          'An error occurred while updating your frame. Please try again later.',
+        )
+      }
+      
+    })
 
-      await fetch('http://localhost:5173/frames', {
-        method: 'PUT',
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          frameNameSlug,
-          htmlContent,
-        }),
-      })
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['get-tags'],
-      })
-    }
-  })
-
-  async function changeName({ firstName, lastName, htmlContent }: NameOfFrameSchema) {
-    await mutateAsync({ firstName, lastName, htmlContent })
-  }
 
   return (
-    <form onSubmit={handleSubmit(changeName)} className="w-full space-y-6">
+    <form onSubmit={onSubmit} className="w-full space-y-6">
+
       <div className="space-y-2">
         <label className="text-sm font-medium text-text-primary block " htmlFor="title">Change First Name</label>
         <input 
           {...register('firstName')}
-          id="name" 
+          id="firstName" 
           placeholder='Type here the new first name.'
           type="text" 
           className="border border-border hover:border-border-hover bg-foreground rounded-lg px-3 py-2 w-full text-sm focus:outline-primary focus:border-none"
@@ -76,11 +55,12 @@ export function UpdateFrameForm() {
           <p className="text-sm text-error">{formState.errors.firstName.message}</p>
         )}
       </div>
+
       <div className="space-y-2">
         <label className="text-sm font-medium text-text-primary block " htmlFor="title">Change Last Name</label>
         <input 
           {...register('lastName')}
-          id="name" 
+          id="lastName" 
           placeholder='Type here the new last name.'
           type="text" 
           className="border border-border hover:border-border-hover bg-foreground rounded-lg px-3 py-2 w-full text-sm focus:outline-primary focus:border-none"
@@ -89,12 +69,13 @@ export function UpdateFrameForm() {
           <p className="text-sm text-error">{formState.errors.lastName.message}</p>
         )}
       </div>
+
       <div className="space-y-2">
-        <label className="text-sm font-medium text-text-primary block " htmlFor="title">Change Email</label>
+        <label className="text-sm font-medium text-text-primary block " htmlFor="title">Change HTML Content</label>
         <input 
           {...register('htmlContent')}
-          id="name" 
-          placeholder='Type here the new HTMLContent.'
+          id="htmlContent" 
+          placeholder='Type here the new HTML Content.'
           type="text" 
           className="border border-border hover:border-border-hover bg-foreground rounded-lg px-3 py-2 w-full text-sm focus:outline-primary focus:border-none"
         />
@@ -104,9 +85,10 @@ export function UpdateFrameForm() {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-text-primary block" htmlFor="slug">Frame Name</label>
+        <label className="text-sm font-medium text-text-primary block" htmlFor="slug">Frame Slug</label>
         <input 
-          id="slug" 
+          {...register('frameNameSlug')}
+          id="frameNameSlug" 
           type="text"
           placeholder='This will be automatically filled in.' 
           readOnly 

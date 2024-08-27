@@ -1,5 +1,5 @@
 export interface CreateFrameProps {
-  id: string
+  id?: string
   firstName: string
   lastName: string
   frameNameSlug: string

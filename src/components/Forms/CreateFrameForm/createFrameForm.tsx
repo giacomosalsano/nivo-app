@@ -1,19 +1,19 @@
-import { Check, Loader2, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { Check, Loader2, X } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from "../../ui/button";
 import * as Dialog from '@radix-ui/react-dialog'
 import { getFrameNameFromString } from '../../GetFrameNameFromString/getFrameNameFromString';
-import { nameOfFrameSchema, NameOfFrameSchema } from '../../NameOfFrameSchema/nameOfFrameSchema';
 import { createFrame } from '../../../core/modules/frames/service/createFrame';
+import { Frame } from '../../Interfaces/FrameInterface';
+import { frameSchema } from '../../FrameSchema/frameSchema';
 
 export function CreateFrameForm() {
 
-  const { register, handleSubmit, watch, formState } = useForm<NameOfFrameSchema>({
-    resolver: zodResolver(nameOfFrameSchema),
+
+  const { register, handleSubmit, watch, formState } = useForm<Frame>({
+    resolver: zodResolver(frameSchema),
   })
-
-
 
   const frameNameSlug = watch('firstName') 
     ? getFrameNameFromString(watch('firstName')) + '_' + getFrameNameFromString(watch('lastName'))
@@ -21,10 +21,11 @@ export function CreateFrameForm() {
 
     const onSubmit = handleSubmit(async (data)=> {
       try {
-        await createFrame(data)
+        const frame = await createFrame(data)
         window.alert(
           'Your frame has been created successfully.',
         )
+        setFrames( )
       }
       catch (error) {
         window.alert(
@@ -36,6 +37,7 @@ export function CreateFrameForm() {
 
   return (
     <form onSubmit={onSubmit} className="w-full space-y-6">
+
       <div className="space-y-2">
         <label className="text-sm font-medium text-text-primary block " htmlFor="title">First Name</label>
         <input 
@@ -49,6 +51,7 @@ export function CreateFrameForm() {
           <p className="text-sm text-error">{formState.errors.firstName.message}</p>
         )}
       </div>
+
       <div className="space-y-2">
         <label className="text-sm font-medium text-text-primary block " htmlFor="title">Last Name</label>
         <input 
@@ -62,6 +65,7 @@ export function CreateFrameForm() {
           <p className="text-sm text-error">{formState.errors.lastName.message}</p>
         )}
       </div>
+
       <div className="space-y-2">
         <label className="text-sm font-medium text-text-primary block " htmlFor="title">HTML Content</label>
         <input 
@@ -77,7 +81,7 @@ export function CreateFrameForm() {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-text-primary block" htmlFor="slug">Frame Name</label>
+        <label className="text-sm font-medium text-text-primary block" htmlFor="slug">Frame Slug</label>
         <input 
         {...register('frameNameSlug')}
           id="frameNameSlug" 

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const nameOfFrameSchema = z.object({
+export const frameSchema = z.object({
   firstName: z.string().min(3, { message: 'Minimum 3 characters.' }),
   lastName: z.string().min(3, { message: 'Minimum 3 characters.' }),
   frameNameSlug: z.string(),
@@ -8,4 +8,4 @@ export const nameOfFrameSchema = z.object({
 
 })
 
-export type NameOfFrameSchema = z.infer<typeof nameOfFrameSchema>
+export type Frame = z.infer<typeof frameSchema>

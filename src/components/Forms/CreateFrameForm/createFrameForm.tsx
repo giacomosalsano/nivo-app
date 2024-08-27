@@ -7,10 +7,6 @@ import { getFrameNameFromString } from '../../GetFrameNameFromString/getFrameNam
 import { nameOfFrameSchema, NameOfFrameSchema } from '../../NameOfFrameSchema/nameOfFrameSchema';
 import { createFrame } from '../../../core/modules/frames/service/createFrame';
 
-
-
-
-
 export function CreateFrameForm() {
 
   const { register, handleSubmit, watch, formState } = useForm<NameOfFrameSchema>({
@@ -67,7 +63,7 @@ export function CreateFrameForm() {
         )}
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium text-text-primary block " htmlFor="title">Email</label>
+        <label className="text-sm font-medium text-text-primary block " htmlFor="title">HTML Content</label>
         <input 
           {...register('htmlContent')}
           id="htmlContent" 

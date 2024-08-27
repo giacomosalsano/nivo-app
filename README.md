@@ -1,7 +1,7 @@
-<h1 align="center"> Nivo-App - a React form </h1>
+<h1 align="center"> Nivo-App </h1>
 
 <p align="center">
-Project developed by Rocketseat to practice React. <br/>
+Project developed for a Test. <br/>
 </p>
 
 <p align="center">
@@ -21,16 +21,25 @@ Project developed by Rocketseat to practice React. <br/>
 
 This project was developed with the following tools:
 
-- React
+- React.JS
 - React Query
 - React Hook Form
 - TailwindCSS
-- shdcn/ui
+- Node.JS
+- Prisma
+- Postgres
+- Axios
+- Zod
+- Vite
+- ContextAPI
+- Docker
+- Postman
+
 
 
 ## 💻 Project
 
-This project is a complete form that allows the registration of a product and, at the same time, allows us to connect the frame to one or more categories that can be created while we are adding the product.
+This project is an incomplete form that allows the registration for a list.
 
 
 

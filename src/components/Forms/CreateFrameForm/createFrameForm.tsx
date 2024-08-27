@@ -27,6 +27,7 @@ export function CreateFrameForm() {
         const payload = {
           ...data,
           frameNameSlug: frameNameSlugger,
+          htmlContent: `<iframe>${data.htmlContent}</iframe>`
         }
         const frame = await createFrame(payload)
         window.alert(

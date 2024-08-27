@@ -1,3 +1,4 @@
+import { Frames } from '../FramesExamples/framesExamples'
 import { EditFramePortal } from '../Portal/editFramePortal'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 

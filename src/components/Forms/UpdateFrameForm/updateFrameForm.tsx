@@ -7,37 +7,39 @@ import { updateFrame } from '../../../core/modules/frames/service/updateFrame'
 import { frameSchema } from '../../FrameSchema/frameSchema'
 import { Frame } from '../../Interfaces/FrameInterface'
 import { getFrameNameFromString } from '../../GetFrameNameFromString/getFrameNameFromString'
+import { useContext } from 'react'
+import { FramesContext } from '../../../Contexts/ContexProviders/framesContextProvider'
+import { useNavigate } from 'react-router-dom'
 
 
+interface UpdateFrameFormProps {
+  frameToEdit: Frame;
+}
 
-
-export function UpdateFrameForm() {
-  const { } = frame
-
+export function UpdateFrameForm({ frameToEdit }: UpdateFrameFormProps) {
+  const { frames, setFrames } = useContext(FramesContext);
+  const navigate = useNavigate();
+  
   const { register, handleSubmit, watch, formState } = useForm<Frame>({
     resolver: zodResolver(frameSchema),
-    defaultValues: {firstName: frame.firstName}
+    defaultValues: frameToEdit
   })
 
-  const frameNameSlug = watch('firstName') 
+
+  const frameNameSlugger = watch('firstName') 
     ? getFrameNameFromString(watch('firstName')) + '_' + getFrameNameFromString(watch('lastName'))
     : ''
 
-    const onSubmit = handleSubmit(async (data)=> {
-      try {
-        await updateFrame(data)
-        window.alert(
-          'Your frame has been updated successfully.',
-        )
-      }
-      catch (error) {
-        window.alert(
-          'An error occurred while updating your frame. Please try again later.',
-        )
-      }
-      
-    })
-
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const updatedFrame = await updateFrame({ ...data, id: frameToEdit.id });
+      setFrames(frames.map(frame => frame.id === updatedFrame.id ? updatedFrame : frame));
+      window.alert('Your frame has been updated successfully.');
+      navigate('/');
+    } catch (error) {
+      window.alert('An error occurred while updating your frame. Please try again later.');
+    }
+  });
 
   return (
     <form onSubmit={onSubmit} className="w-full space-y-6">
@@ -92,7 +94,7 @@ export function UpdateFrameForm() {
           type="text"
           placeholder='This will be automatically filled in.' 
           readOnly 
-          value={frameNameSlug}
+          value={frameNameSlugger}
           className="border border-border bg-foreground rounded-lg px-3 py-2 w-full text-sm"
         />
       </div>

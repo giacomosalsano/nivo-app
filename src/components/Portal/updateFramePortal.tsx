@@ -1,11 +1,21 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { Button } from '../ui/button';
 import { Edit } from 'lucide-react';
+import { useContext } from 'react';
+import { FramesContext } from '../../Contexts/ContexProviders/framesContextProvider';
 import { UpdateFrameForm } from '../Forms/UpdateFrameForm/updateFrameForm';
-import { Frames } from '../FramesExamples/framesExamples';
+import { Frame } from '../Interfaces/FrameInterface';
+import { useNavigate } from 'react-router-dom';
 
 
 export function EditFramePortal() {
+  const { frames, selectedFrame, setSelectedFrame } = useContext(FramesContext);
+
+
+  const handleSelectFrame = (frame: Frame) => {
+    setSelectedFrame(frame);
+  };
+
   return (
     <div>
       <Dialog.Root>
@@ -14,33 +24,32 @@ export function EditFramePortal() {
             className='rounded-full text-text-primary'
             type="submit"
             size='icon'
-            variant='primary'>
+            variant='primary'
+            onClick={() =>  handleSelectFrame}>
             <Edit className="size-3" />
           </Button>
         </Dialog.Trigger>
 
-        {Frames.map((frame)=> {
-          return (
-            <Dialog.Portal key={frame.frameNameSlug}>
-                <Dialog.Overlay className="fixed inset-0 bg-overlay" />
+        {selectedFrame && (
+          <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-overlay" />
 
-                <Dialog.Content className="fixed space-y-10 p-10 right-0 top-0 bottom-0 h-screen min-w-[400px] z-10 bg-background">
-                  <div className="space-y-3">
-                    <Dialog.Title className="text-xl font-bold">
-                      Edit {frame.name.firstName} {frame.name.lastName}'s info
-                    </Dialog.Title>
-                    
-                    <Dialog.Description className="text-sm text-text-primary">
-                      Here you can edit the frame @{frame.frameNameSlug}.
-                    </Dialog.Description>
-                  </div>
+          <Dialog.Content className="fixed space-y-10 p-10 right-0 top-0 bottom-0 h-screen min-w-[400px] z-10 bg-background">
+            <div className="space-y-3">
+              <Dialog.Title className="text-xl font-bold">
+                Edit {selectedFrame.firstName} {selectedFrame.lastName}'s info
+              </Dialog.Title>
+              
+              <Dialog.Description className="text-sm text-text-primary">
+                Here you can edit the frame @{selectedFrame.frameNameSlug}.
+              </Dialog.Description>
+            </div>
 
-                  <UpdateFrameForm />
-                  
-                </Dialog.Content> 
-              </Dialog.Portal>
-          )
-        })}
+            <UpdateFrameForm frameToEdit={selectedFrame}/>
+            
+          </Dialog.Content> 
+        </Dialog.Portal>
+        )}
       </Dialog.Root>
     </div>
   )

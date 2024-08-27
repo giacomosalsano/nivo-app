@@ -4,6 +4,7 @@ import { UserPlus } from "lucide-react";
 import { CreateFrameForm } from "../Forms/CreateFrameForm/createFrameForm";
 
 export function AddFramePortal() {
+  
   return (
     <div>
       <Dialog.Root>

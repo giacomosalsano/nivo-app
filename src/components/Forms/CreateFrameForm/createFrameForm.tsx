@@ -7,25 +7,36 @@ import { getFrameNameFromString } from '../../GetFrameNameFromString/getFrameNam
 import { createFrame } from '../../../core/modules/frames/service/createFrame';
 import { Frame } from '../../Interfaces/FrameInterface';
 import { frameSchema } from '../../FrameSchema/frameSchema';
+import { useContext } from 'react';
+import { FramesContext } from '../../../Contexts/ContexProviders/framesContextProvider';
 
 export function CreateFrameForm() {
+  const { frames, setFrames } = useContext(FramesContext);
 
 
-  const { register, handleSubmit, watch, formState } = useForm<Frame>({
+  const { register, handleSubmit, watch, formState, reset, setValue } = useForm<Frame>({
     resolver: zodResolver(frameSchema),
   })
 
-  const frameNameSlug = watch('firstName') 
+  const frameNameSlugger = watch('firstName') 
     ? getFrameNameFromString(watch('firstName')) + '_' + getFrameNameFromString(watch('lastName'))
     : ''
 
     const onSubmit = handleSubmit(async (data)=> {
       try {
-        const frame = await createFrame(data)
+        const payload = {
+          ...data,
+          frameNameSlug: frameNameSlugger,
+        }
+        const frame = await createFrame(payload)
         window.alert(
           'Your frame has been created successfully.',
         )
-        setFrames( )
+        setFrames([
+          ...frames,
+          frame
+        ])
+        reset
       }
       catch (error) {
         window.alert(
@@ -88,7 +99,7 @@ export function CreateFrameForm() {
           type="text"
           placeholder='This will be automatically filled in.' 
           readOnly 
-          value={frameNameSlug}
+          value={frameNameSlugger}
           className="border border-border bg-foreground rounded-lg px-3 py-2 w-full text-sm"
         />
       </div>

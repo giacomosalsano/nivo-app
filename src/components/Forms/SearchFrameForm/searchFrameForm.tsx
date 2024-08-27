@@ -36,7 +36,7 @@ export function SearchFrameForm() {
             />
               <DropDown>
                 <DropDown.Trigger className='place-self-end'>
-                  <div className='bg-primary rounded-full w-4 h-4 items-center hover:bg-primary-hover transition-all focus:outline-none'>
+                  <div className='bg-primary rounded-full items-center hover:bg-primary-hover transition-all focus:outline-none'>
                     <Button 
                       className='rounded-full text-text-primary'
                       type="submit"

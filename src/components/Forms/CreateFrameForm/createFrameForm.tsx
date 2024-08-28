@@ -14,7 +14,7 @@ export function CreateFrameForm() {
   const { frames, setFrames } = useContext(FramesContext);
 
 
-  const { register, handleSubmit, watch, formState, reset, setValue } = useForm<Frame>({
+  const { register, handleSubmit, watch, formState, reset } = useForm<Frame>({
     resolver: zodResolver(frameSchema),
   })
 
